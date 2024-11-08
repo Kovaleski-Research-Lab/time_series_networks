@@ -25,7 +25,6 @@ class LSTMLightning(pl.LightningModule):
         params['input_size'] = int(params['input_size'])
         params['hidden_size'] = int(params['hidden_size'])
         params['num_layers'] = int(params['num_layers'])
-        params['output_size'] = int(params['output_size'])
         params['learning_rate'] = float(params['learning_rate'])
         params['optimizer'] = str(params['optimizer'])
         params['batch_first'] = bool(params['batch_first'])
@@ -59,13 +58,11 @@ class LSTMLightning(pl.LightningModule):
         layers.append(nn.Linear(self.params['hidden_size'], fc_layers[layer_keys[0]]))
         layers.append(activation)
 
-        # Hidden layers
+        # Hidden layers and output layer
         for i in range(len(layer_keys) - 1):
             layers.append(nn.Linear(fc_layers[layer_keys[i]], fc_layers[layer_keys[i+1]]))
             layers.append(activation)
 
-        # Output layer
-        layers.append(nn.Linear(fc_layers[layer_keys[-1]], self.params['output_size']))
 
         return nn.Sequential(*layers)
 
@@ -121,7 +118,6 @@ if __name__ == "__main__":
         'input_size': 1,
         'hidden_size': 128,
         'num_layers': 5,
-        'output_size': 1,
         'learning_rate': 0.001,
         'optimizer': 'adam',
         'batch_first': True,
@@ -131,7 +127,8 @@ if __name__ == "__main__":
                 'activation': 'relu',
                 'size0': 64,
                 'size1': 64,
-                'size2': 32
+                'size2': 32,
+                'output_size': 1,
             }
     }
 
